@@ -1,0 +1,35 @@
+.h-table {
+  display: grid;
+  font-size: 12px;
+
+  // border
+  // TODO border var
+
+  & > .h-cell {
+    background-color: #fff;
+    padding: 0px 8px;
+  }
+
+  & > .h-cell__header {
+    background-color: #f8f8f9;
+    text-align: center;
+  }
+
+  & > .table-cell__no-data {
+    text-align: center;
+    line-height: 50px;
+  }
+
+  // ---------- //
+  & > .h-cell {
+    border-bottom: 1px solid #ebeef5;
+    border-right: 1px solid #ebeef5;
+  }
+  & > .h-cell.h-cell--first-row {
+    border-top: 1px solid #ebeef5;
+  }
+  & > .h-cell.h-cell--first-column {
+    border-left: 1px solid #ebeef5;
+  }
+  // ---------- //
+}

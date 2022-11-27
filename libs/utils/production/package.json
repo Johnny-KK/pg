@@ -1,0 +1,16 @@
+{
+  "name": "@hb/utils",
+  "version": "1.0.7",
+  "description": "utils",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "tian.jingwei",
+  "license": "MIT",
+  "files": [
+    "lib",
+    "es"
+  ],
+  "typings": "lib/index.d.ts"
+}

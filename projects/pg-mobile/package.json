@@ -1,0 +1,20 @@
+{
+  "name": "pg-mobile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cap run android",
+    "build": "tauri build"
+  },
+  "keywords": [],
+  "author": "tian.jingwei",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "^4.3.0",
+    "@capacitor/core": "^4.3.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^4.3.0"
+  }
+}

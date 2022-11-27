@@ -1,0 +1,10 @@
+{
+  "name": "@hb/utils",
+  "version": "1.0.4",
+  "description": "utils",
+  "main": "src/index.ts",
+  "scripts": {},
+  "keywords": [],
+  "author": "tian.jingwei",
+  "license": "MIT"
+}

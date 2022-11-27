@@ -1,0 +1,26 @@
+.h-cell__button {
+  flex: 1;
+
+  & > .h-icon {
+    cursor: pointer;
+  }
+
+  & > .h-icon:focus {
+    outline: none;
+  }
+
+  & > .h-icon + .h-icon {
+    margin-left: 10px;
+  }
+
+  & > .h-icon + .el-button:not(:last-of-type) {
+    margin-right: 10px;
+  }
+}
+
+.h-cell__button-align__left {
+  text-align: left;
+}
+.h-cell__button-align__right {
+  text-align: right;
+}

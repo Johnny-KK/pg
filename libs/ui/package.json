@@ -1,0 +1,21 @@
+{
+  "name": "@hb/ui",
+  "version": "1.0.3",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "vitest --silent --passWithNoTests",
+    "coverage": "vitest run --coverage"
+  },
+  "keywords": [],
+  "author": "tian.jingwei",
+  "license": "MIT",
+  "peerDependencies": {
+    "element-plus": "^2.2.15",
+    "vue": "^3.2.37"
+  },
+  "dependencies": {
+    "@hb/utils": "workspace:^1.0.6",
+    "async-validator": "^4.2.5"
+  }
+}

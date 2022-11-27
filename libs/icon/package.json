@@ -1,0 +1,10 @@
+{
+  "name": "@hb/icon",
+  "version": "1.0.0",
+  "description": "icon components",
+  "main": "src/index.ts",
+  "scripts": {},
+  "keywords": [],
+  "author": "tian.jingwei",
+  "license": "MIT"
+}

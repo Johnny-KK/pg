@@ -1,0 +1,43 @@
+.h-form {
+  font-size: 12px;
+
+  & > .h-form-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .h-form-item__label {
+    font-weight: 600;
+    padding-right: 10px;
+  }
+
+  .h-form-item__label.is-required:before {
+    content: '*';
+    color: #ff0000;
+    margin-right: 4px;
+  }
+}
+
+.h-form.h-form--rc {
+  display: grid;
+  grid-gap: 10px;
+  font-size: 12px;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.h-form.h-form--inline {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  & > div.h-cell__with-label:not(:last-child) {
+    margin-right: 20px;
+    margin-bottom: 10px;
+  }
+
+  & > .h-form-item > .h-cell {
+    width: 400px;
+  }
+}

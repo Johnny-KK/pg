@@ -1,0 +1,35 @@
+.h-description {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  font-size: 12px;
+
+  & > .h-description-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    border-bottom: 1px solid #ebeef5;
+    border-right: 1px solid #ebeef5;
+
+    & > .h-description-item__label {
+      background-color: #f5f7fa;
+      font-weight: bold;
+      border-right: 1px solid #ebeef5;
+      text-align: center;
+      line-height: 32px;
+      padding: 0 10px;
+    }
+
+    & > .h-cell {
+      flex: 1;
+      padding: 0 10px;
+    }
+  }
+
+  & > .h-description-item.h-description-item--first-row {
+    border-top: 1px solid #ebeef5;
+  }
+  & > .h-description-item.h-description-item--first-column {
+    border-left: 1px solid #ebeef5;
+  }
+}
