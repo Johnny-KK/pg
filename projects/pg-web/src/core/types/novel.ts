@@ -4,7 +4,7 @@ type Novel = {
   name: string;
   author: string;
   path: string; // source path, relative path base on BaseDirectory.App
-  update: string; // update mark
+  sync: number | null; // last sync timestamp
   progress: number; // current read chapter index
 };
 
@@ -13,9 +13,11 @@ type Catalog = {
   name: string;
 }[];
 
-type NovelMeta = {
+type LocalNovelMeta = {
   name: string;
   catalog: Catalog;
 };
 
-export type { Novel, Catalog, NovelMeta };
+type RemoteNovelMeta = { uid: string; sync: number };
+
+export type { Novel, Catalog, LocalNovelMeta, RemoteNovelMeta };

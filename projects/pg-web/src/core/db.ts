@@ -1,5 +1,5 @@
 import Dexie, { Table } from 'dexie';
-import { Novel } from './type';
+import { Novel } from './types/novel';
 
 type Todo = {
   id?: number;

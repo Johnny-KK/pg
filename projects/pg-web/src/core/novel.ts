@@ -1,7 +1,7 @@
 import { randomString } from '@hb/utils';
 import { BaseDirectory, readTextFile } from '@tauri-apps/api/fs';
 import { db } from './db';
-import { Catalog, Novel, NovelMeta } from './type';
+import { Catalog, Novel, NovelMeta } from './types/novel';
 
 async function fsLoadCatalogAndProgress(id: number): Promise<{ catalog: Catalog; progress: number }> {
   const novel: Novel | undefined = await db.novel.get(id);
@@ -23,8 +23,12 @@ async function dbUpdateProgress(id: number, progress: number): Promise<void> {
 }
 
 async function dbAddNovel(meta: NovelMeta): Promise<void> {
-  await db.novel.add({ uid: randomString(), name: meta.name, author: '', path: `novel\\${meta.name}`, update: randomString(), progress: 0 });
+  await db.novel.add({ uid: randomString(), name: meta.name, author: '', path: `novel\\${meta.name}`, sync: null, progress: 0 });
+}
+
+async function dbListNovel(): Promise<Novel[]> {
+  return await db.novel.toArray();
 }
 
 export type { Catalog };
-export { fsLoadCatalogAndProgress, fsLoadChapter, dbUpdateProgress, dbAddNovel };
+export { fsLoadCatalogAndProgress, fsLoadChapter, dbUpdateProgress, dbAddNovel, dbListNovel };
