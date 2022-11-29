@@ -28,6 +28,7 @@ function mouseup(id: number) {
   timer !== -1 && router.push(`/novel-view/${id}`);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function scan() {
   scanNovelFromLocal()
     .then((response) => {
@@ -40,28 +41,26 @@ function scan() {
 </script>
 
 <template>
-  <div>
-    <div>
-      <button @click="scan">scan local</button>
-    </div>
-    <div class="novel-list">
-      <div v-for="item in list" :key="item.name" @mousedown="mousedown" @mouseup="mouseup(item.id)">{{ item.name }}</div>
-      <div @click="router.replace('/novel-crypto')">OOPS</div>
-    </div>
+  <div class="novel-list">
+    <div v-for="item in list" :key="item.name" @mousedown="mousedown" @mouseup="mouseup(item.id)">{{ item.name }}</div>
+    <div @click="router.replace('/novel-crypto')">OOPS</div>
   </div>
 </template>
 
 <style lang="less" scoped>
 .novel-list {
+  width: 100%;
   display: grid;
   grid-gap: 15px;
   grid-template-columns: repeat(auto-fill, 100px);
-  grid-template-rows: repeat(auto-fill, 100px);
   justify-content: space-between;
 
   & > div {
     background-color: antiquewhite;
     cursor: pointer;
+    height: 70px;
+    padding: 15px;
+    text-align: center;
   }
 }
 </style>
