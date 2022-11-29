@@ -1,68 +1,32 @@
 <script lang="ts" setup name="novel-view">
-import { CSSProperties, ref } from 'vue';
-import { apiLoadChapter, dbFetchNovelById, dbUpdateProgress, Novel } from './service';
+import { ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { computed } from 'vue';
+import useNovelView from './use-novel-view';
 
 const router = useRouter();
 const props = defineProps<{ id: string }>();
-const novel = ref<Novel>();
-const content = ref<string>('');
+
+const { loading, content, preview, next, jump } = useNovelView(parseInt(props.id));
+const contentLines = computed(() => content.value.split(/\r\n/g));
+const jumpNum = ref<number>(0);
+
 const catalogVisisble = ref<boolean>(false);
 const contentEl = ref<HTMLSelectElement | null>(null);
-const contentLines = computed(() => content.value.split(/\r\n/g));
 
-const COLOR_LIST = ['red'] as const;
-
-const background = ref<string>('#fff');
-
-const contentStyle = computed<CSSProperties>(() => {
-  return {
-    backgroundColor: background.value,
-  };
+watch(loading, () => {
+  loading.value === false && scrollTop();
 });
 
-fetchNovel();
-
-function fetchNovel() {
-  dbFetchNovelById(parseInt(props.id))
-    .then((response) => {
-      novel.value = response;
-    })
-    .then(() => loadChapter());
-}
-function loadChapter(path?: string): Promise<void> {
-  path = path || novel.value.chapter[novel.value.progress]?.path || '';
-  if (path === '') {
-    return;
-  }
-  return apiLoadChapter(path).then((res) => {
-    content.value = res;
-  });
-}
-async function preview() {
-  if (novel.value.progress === 0) {
-    return;
-  }
-  novel.value.progress--;
-  dbUpdateProgress(novel.value.id, novel.value.progress);
-  await loadChapter();
-  scrollTop();
-}
-async function next() {
-  novel.value.progress++;
-  dbUpdateProgress(novel.value.id, novel.value.progress);
-  await loadChapter();
-  scrollTop();
-}
-function catalog() {
+function catalog(): void {
   catalogVisisble.value = true;
 }
-function back() {
+
+function back(): void {
   router.back();
 }
-function scrollTop() {
-  contentEl.value.scrollIntoView();
+
+function scrollTop(): void {
+  contentEl.value?.scrollIntoView();
 }
 </script>
 
@@ -71,36 +35,51 @@ function scrollTop() {
     <section class="actions">
       <span @click="preview">preview</span>
       <span @click="catalog">catalog</span>
-      <span @click="back">back</span>
       <span @click="next">next</span>
+      <span @click="back">back</span>
     </section>
 
-    <section ref="contentEl" class="content" :style="contentStyle">
+    <section ref="contentEl" class="content">
       <p v-for="(line, n) in contentLines" :key="n">{{ line }}</p>
     </section>
 
     <section class="actions">
       <span @click="preview">preview</span>
       <span @click="catalog">catalog</span>
-      <span @click="back">back</span>
       <span @click="next">next</span>
+      <input v-model="jumpNum" type="number" />
+      <span @click="() => jump(jumpNum)">jump</span>
+      <span @click="back">back</span>
     </section>
-
-    <!-- <div v-show="catalogVisisble">
-      <div v-for="item in meta.chapter" :key="item.name" @click="loadChapter(item.path)">{{ item.name }}</div>
-    </div> -->
   </div>
 </template>
 
 <style lang="less" scoped>
+.novel-view {
+  background-color: #cddfcd;
+  margin: -20px;
+  padding: 20px;
+  min-height: 100%;
+}
+
 .actions {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  user-select: none;
+  height: 25px;
+  line-height: 25px;
+
+  & > input {
+    width: 50px;
+    margin: 0 20px;
+  }
 
   & > span {
-    margin: 0 10px;
     cursor: pointer;
+  }
+  & > span + span {
+    margin-left: 20px;
   }
 }
 

@@ -1,15 +1,7 @@
 import { confirm } from '@tauri-apps/api/dialog';
 import { BaseDirectory, createDir, readTextFile, writeTextFile } from '@tauri-apps/api/fs';
+import { dbAddNovel, NovelMeta } from '../../core';
 import { checkDir, Directory, handleFilePath } from './utils';
-
-type MetaInfoNovel = {
-  name: string;
-  path: string; // relative path base on BaseDirectory.App
-  chapter: {
-    name: string;
-    path: string; // relative path base on BaseDirectory.App
-  }[];
-};
 
 /**
  * @param path source absolute path
@@ -17,16 +9,10 @@ type MetaInfoNovel = {
 async function novelHandler(path: string): Promise<boolean> {
   return confirm('是否导入小说?', { title: '文件', type: 'info' })
     .then((response: boolean) => {
-      if (response !== true) {
-        return Promise.reject();
-      }
-      return checkDir(Directory.NOVEL);
+      return response === true ? checkDir(Directory.NOVEL) : Promise.reject();
     })
     .then((response) => {
-      if (response !== true) {
-        return Promise.reject('创建小说目录失败');
-      }
-      return handleNovel(path);
+      return response === true ? handleNovel(path) : Promise.reject('创建小说目录失败');
     })
     .then(() => {
       return true;
@@ -40,6 +26,7 @@ async function handleNovel(path: string): Promise<boolean> {
   const { name } = handleFilePath(path);
   const basePath = `${Directory.NOVEL}\\${name}`;
   try {
+    console.warn('start to save');
     // create dir
     await createDir(basePath, { dir: BaseDirectory.App });
     // load file
@@ -47,7 +34,7 @@ async function handleNovel(path: string): Promise<boolean> {
     // iterate to create chapter & meta
     let content = '';
     let index = 0;
-    const meta: MetaInfoNovel = { name: name, path: basePath, chapter: [] };
+    const meta: NovelMeta = { name: name, catalog: [] };
     for await (let line of lines) {
       line = line.trim();
       // TODO
@@ -56,7 +43,7 @@ async function handleNovel(path: string): Promise<boolean> {
       const patten = /^第[0123456789]+章\s.*$/g;
       if (patten.test(line)) {
         await writeTextFile(`${basePath}\\${index}.txt`, content, { dir: BaseDirectory.App });
-        meta.chapter.push({ name: line, path: `${basePath}\\${index}.txt` });
+        meta.catalog.push({ name: line, path: `${basePath}\\${index}.txt` });
         content = line;
         index++;
       } else {
@@ -65,9 +52,12 @@ async function handleNovel(path: string): Promise<boolean> {
     }
     await writeTextFile(`${basePath}\\${index}.txt`, content, { dir: BaseDirectory.App });
     await writeTextFile(`${basePath}\\meta`, JSON.stringify(meta), { dir: BaseDirectory.App });
+    await dbAddNovel(meta);
+    console.warn('save success');
     return Promise.resolve(true);
   } catch (error) {
     // delete cache
+    console.warn('save faild');
     return Promise.resolve(false);
   }
 }
