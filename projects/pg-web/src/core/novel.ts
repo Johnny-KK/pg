@@ -23,7 +23,7 @@ async function dbUpdateProgress(id: number, progress: number): Promise<void> {
 }
 
 async function dbAddNovel(meta: NovelMeta): Promise<void> {
-  await db.novel.add({ name: meta.name, author: '', path: `novel\\${meta.name}`, update: randomString(), progress: 0 });
+  await db.novel.add({ uid: randomString(), name: meta.name, author: '', path: `novel\\${meta.name}`, update: randomString(), progress: 0 });
 }
 
 export type { Catalog };

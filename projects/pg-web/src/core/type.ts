@@ -1,5 +1,6 @@
 type Novel = {
   id?: number;
+  uid: string; // unique 64 length string
   name: string;
   author: string;
   path: string; // source path, relative path base on BaseDirectory.App
