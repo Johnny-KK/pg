@@ -2,17 +2,20 @@ import { ref, watch } from 'vue';
 import { fsLoadChapter, fsLoadCatalogAndProgress, dbUpdateProgress, Catalog } from '../../core';
 
 const hook = (id: number) => {
-  // TODO loading
+  const loading = ref<boolean>(false);
   const content = ref<string>(''); // current chapter content
-
   const progress = ref<number>(0);
-
   const catalog = ref<Catalog>([]);
 
-  fsLoadCatalogAndProgress(id).then((response) => {
-    catalog.value = response.catalog;
-    progress.value = response.progress;
-  });
+  loading.value = true;
+  fsLoadCatalogAndProgress(id)
+    .then((response) => {
+      catalog.value = response.catalog;
+      progress.value = response.progress;
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 
   watch(progress, handleChange);
 
@@ -28,18 +31,19 @@ const hook = (id: number) => {
     progress.value = i;
   }
 
-  function loadChapter(): void {
-    fsLoadChapter(catalog.value[progress.value].path).then((response) => {
-      content.value = response;
-    });
-  }
-
   function handleChange(): void {
-    loadChapter();
+    loading.value = true;
+    fsLoadChapter(catalog.value[progress.value].path)
+      .then((response) => {
+        content.value = response;
+      })
+      .finally(() => {
+        loading.value = false;
+      });
     dbUpdateProgress(id, progress.value);
   }
 
-  return { content, catalog, preview, next, jump };
+  return { loading, content, catalog, preview, next, jump };
 };
 
 export default hook;

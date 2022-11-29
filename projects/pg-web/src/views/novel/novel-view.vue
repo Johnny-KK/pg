@@ -1,17 +1,21 @@
 <script lang="ts" setup name="novel-view">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import useNovelView from './use-novel-view';
 
 const router = useRouter();
 const props = defineProps<{ id: string }>();
 
-const { content, preview, next, jump } = useNovelView(parseInt(props.id));
+const { loading, content, preview, next, jump } = useNovelView(parseInt(props.id));
 const contentLines = computed(() => content.value.split(/\r\n/g));
 const jumpNum = ref<number>(0);
 
 const catalogVisisble = ref<boolean>(false);
 const contentEl = ref<HTMLSelectElement | null>(null);
+
+watch(loading, () => {
+  loading.value === false && scrollTop();
+});
 
 function catalog(): void {
   catalogVisisble.value = true;
